@@ -31,3 +31,12 @@ def example2():
             pass
         print(1, 2, 3)
 example2()
+
+def example3():
+    # empty line inside block should be handled correctly
+    a, b, c = use:
+        my_list = [1, 2, 3]
+
+        return my_list
+    print(a, b, c)
+example3()

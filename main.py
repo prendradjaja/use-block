@@ -17,6 +17,8 @@ def main():
 
     for lineno, line in enumerate(lines, start=1):
         line = line.rstrip('\n')
+        if line.strip() == '':
+            continue
         indent_level, line = parse_indentation(line, indent_string)
         parsed = parse_use_start(line)
         if parsed.is_use_start:
