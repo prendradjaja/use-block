@@ -3,8 +3,11 @@ in this video: https://www.youtube.com/watch?v=QM1iUe6IofM
 
 This implementation has various shortcomings since it uses string matching
 instead of a parser:
-- If `use` is used as a variable or function name, you might see "false
-  positives."
+- If you use the word `use`, you might see "false positives" (lines
+  incorrectly identified as the start of a `use` block). It isn't quite as bad
+  as that: `use` must be a full word (e.g. `unused` and `dont_use_this()`
+  won't trigger a `use` block) and the line must end with `:` in order to
+  trigger a `use` block.
 - The start of a `use` block must be a single line (no line continuation).
 - Comments and multiline strings are not recognized (so `use` blocks inside
   these are not ignored).
