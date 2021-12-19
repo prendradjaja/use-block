@@ -54,14 +54,14 @@ def main():
 def generate_use_call(use, indent_string):
     # if use.assignment_target:
     # else:
-    line = f'_use_block_{use.id}({", ".join(use.parameters)})'
+    line = f'{use.name}({", ".join(use.params)})'
     if use.assignment_target:
         line = use.assignment_target + ' = ' + line
     return indent(line, use.indent_level, indent_string)
 
 
 def generate_use_definition(use, indent_string):
-    result = f'def _use_block_{use.id}({", ".join(use.parameters)}):\n'
+    result = f'def {use.name}({", ".join(use.params)}):\n'
     for lineobj in use.body:
         result += indent(lineobj.text, lineobj.relative_indent_level, indent_string) + '\n'
     return result
@@ -91,24 +91,29 @@ def indent(line, indent_level, indent_string):
 def parse_use_start(line):
     match = re.search(r'\buse\b', line)
     if line.endswith('use:'):
-        parameters = []
+        params = []
+        name = None
     elif line.endswith(':') and match:
-        after_match = line[match.end():].strip()
-        after_match = after_match[:-1]  # remove ':'
-        parameters = [p.strip() for p in after_match.split(',')]
+        after_match = line[match.end():].strip().rstrip(':')
+        if '(' not in after_match:
+            params_string = after_match
+            name = None
+        else:
+            name, params_string = after_match.rstrip(')').split('(')
+        params = [p.strip() for p in params_string.split(',')]
     else:
         return obj(is_use_start = False)
 
     before_match = line[:match.start()].strip()
     if before_match.endswith('='):
-        assignment_target = before_match[:-1].strip()
+        assignment_target = before_match.rstrip('=').strip()
     else:
         assignment_target = None
 
     return obj(
         is_use_start = True,
-        id = next(ids),
-        parameters = parameters,
+        name = name or f'_use_block_{next(ids)}',
+        params = params,
         assignment_target = assignment_target
     )
 ids = itertools.count()
