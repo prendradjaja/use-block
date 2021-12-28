@@ -1,3 +1,5 @@
+[Examples](https://gist.github.com/prendradjaja/6f95c1fba819814d2288617102da3656)
+
 A quick-and-dirty proof of concept implementation of the `use` block described
 in this video: https://www.youtube.com/watch?v=QM1iUe6IofM
 
